@@ -65,10 +65,10 @@ class AltiumRun:
     def get_project_to_open(self) -> Optional[str]:
         return self._project_path_to_open
 
-    def set_function_name_to_run(self, function_name: str) -> None:
+    def set_function_name(self, function_name: str) -> None:
         self._function_name_to_run = function_name
 
-    def get_function_name_to_run(self) -> str:
+    def get_function_name(self) -> str:
         return self._function_name_to_run
 
     def set_function_parameters(self, *args : List[Any]) -> None:
@@ -77,6 +77,12 @@ class AltiumRun:
             self._function_parameters_to_run.append(arg)
 
     def run(self) -> bool:
+        # Generate the path for the scripting project
+        if not os.path.exists(self._project_path):
+            os.makedirs(self._project_path)
+        if not os.path.exists(self._project_path + "/data"):
+            os.makedirs(self._project_path + "/data")
+
         self._internal_scripts_path.clear()
         if self._use_internal_logger:
             self._generate_logger_script()
@@ -107,12 +113,6 @@ class AltiumRun:
         return False
 
     def _generate_scripting_project(self) -> None:
-        # Generate the path for the scripting project
-        if not os.path.exists(self._project_path):
-            os.makedirs(self._project_path)
-        if not os.path.exists(self._project_path + "/data"):
-            os.makedirs(self._project_path + "/data")
-
         with open(self._project_path + "/script_project.PrjScr", 'w') as f:
             f.write('[Design]\n')
             f.write('Version=1.0\n')
@@ -162,7 +162,7 @@ class AltiumRun:
                 part = self._convert_param_to_delphi(par)
                 if part is not None:
                     text += part + ", "
-            if len(text) > 0:
+            if len(text) > 1:
                 text = text[:-2]
             return text + "]"
         print(type(param))
