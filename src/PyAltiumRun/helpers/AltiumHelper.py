@@ -3,9 +3,9 @@ from typing import List, Optional, Any
 
 
 def get_installed_versions() -> List[str]:
-    ol:List[str] = []
+    ol: List[str] = []
     top_key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Altium\Builds", 0, winreg.KEY_READ)
-    i:int = 0
+    i: int = 0
     while True:
         try:
             build_key_name = winreg.EnumKey(top_key, i)
@@ -15,19 +15,19 @@ def get_installed_versions() -> List[str]:
             if type(full_build_str) is str:
                 ol.append(full_build_str)
             i += 1
-        except WindowsError as e:
+        except WindowsError:
             break
     return ol
 
 
 def get_install_path(version: Optional[str] = None) -> Optional[str]:
-    var = get_build_var("ProgramsInstallPath")
+    var = get_build_var("ProgramsInstallPath", version)
     if type(var) is str:
         return var
     return None
 
 
-def get_build_var(var_name:str, version: Optional[str] = None) -> Any:
+def get_build_var(var_name: str, version: Optional[str] = None) -> Any:
     top_key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, r"SOFTWARE\Altium\Builds", 0, winreg.KEY_READ)
     i: int = 0
     while True:
@@ -47,5 +47,5 @@ def get_build_var(var_name:str, version: Optional[str] = None) -> Any:
                 if build_str == version:
                     return var_str
             i += 1
-        except WindowsError as e:
+        except WindowsError:
             return None
