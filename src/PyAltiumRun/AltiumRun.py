@@ -11,6 +11,7 @@ class AltiumRun:
 
     This object holds the configuration parameters to create a Altium scripting project and run it accordingly.
     """
+
     def __init__(self, altium_version: Optional[str] = None, use_internal_logger: bool = True):
         self.set_used_altium_version()
         self._project_path = os.path.dirname(sys.argv[0]) + "/scripting_project"
@@ -79,8 +80,11 @@ class AltiumRun:
         log_file_path = self.get_log_file_path()
         if log_file_path is None:
             return
-        file = open(log_file_path, 'w')
-        file.close()
+        try:
+            file = open(log_file_path, 'w')
+            file.close()
+        except FileNotFoundError:
+            return  # The directory was not created yet so the log is empty
 
     def add_script(self, script_path: str) -> None:
         r"""Add a script to the scripting project.
