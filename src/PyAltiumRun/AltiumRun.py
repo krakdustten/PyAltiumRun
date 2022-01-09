@@ -71,7 +71,7 @@ class AltiumRun:
         """
         if not self._use_internal_logger:
             return None
-        return self._project_path + "/data/log.txt"
+        return os.path.abspath(self._project_path + "/data/log.txt")
 
     def clear_log_file(self) -> None:
         r"""Clear the log file.
@@ -217,12 +217,13 @@ class AltiumRun:
             f.write('Version=1.0\n')
             f.write('\n')
             for i, script in enumerate(self._internal_scripts_path + self.external_scripts_path, start=1):
+                path = os.path.abspath(script)
                 f.write(f'[Document{i}]\n')
-                f.write(f'DocumentPath={script}\n')
+                f.write(f'DocumentPath={path}\n')
                 f.write('\n')
 
     def _generate_logger_script(self) -> None:
-        self._internal_scripts_path.append("logger.pas")
+        self._internal_scripts_path.append(self._project_path + "/logger.pas")
         variables = {
             "LogFilePath": self.get_log_file_path(),
         }
@@ -232,7 +233,7 @@ class AltiumRun:
         self._generate_script_from_base("logger.pas", variables)
 
     def _generate_main_script(self) -> None:
-        self._internal_scripts_path.append("main.pas")
+        self._internal_scripts_path.append(self._project_path + "/main.pas")
         parameters = ""
         for param in self._function_parameters_to_run:
             part = self._convert_param_to_delphi(param)

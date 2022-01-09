@@ -22,3 +22,26 @@ run.add_script(r"Altium_scripts/generate_docs.pas")             #Add a script to
 run.set_function("gen_docs", "Arduino_uno")                     #Set the function to run
 run.run()                                                       #Run
 ~~~
+
+## Delphi addons
+
+These are the delphi script addons created.
+
+### Logger
+
+For this module to work the "use_internal_logger" parameter of the runner constructor should be True.
+
+This module creates a log file in the data folder under the scripting project.
+It logs everything in the following format:
+
+~~~
+[DAY/MONTH/YEAR HOUR:MINUTE:SECOND:MILISECOND]: LOGGED_STRING
+~~~
+
+Resulting in a log that looks like this:
+
+~~~
+[09/01/22 10:53:30.573]: Starting script
+[09/01/22 10:53:30.576]: Opening project: Altium_project/Arduino_uno.PrjPcb
+[09/01/22 10:53:30.657]: Arduino_uno
+~~~

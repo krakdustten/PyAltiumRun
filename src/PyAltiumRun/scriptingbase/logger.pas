@@ -2,7 +2,7 @@
 Const
   LogFilePath = '{LogFilePath}';
 
-Procedure write_str_to_log(Const data : String);
+Procedure log_str(Const data : String);
 Var
   logFile : TextFile;
   currentTime : TDataTime;
@@ -21,5 +21,5 @@ Var
   toWrite: String;
 Begin
   toWrite := Format(frm, data);
-  write_str_to_log(toWrite);
+  log_str(toWrite);
 End;
